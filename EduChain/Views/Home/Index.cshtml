@@ -1,7 +1,6 @@
 ﻿@page
 @{
-    ViewData["Title"] = "Login page";
-    Layout = "_LoginLayout";
+    //ViewData["Title"] = "Login page";
 }
 
 <section class="vh-100 gradient-custom">
@@ -12,14 +11,9 @@
                     <div class="card-body p-5 text-center">
                         <div class="mb-md-5 mt-md-4 pb-5">
                             <h2 class="fw-bold mb-2">EduChain</h2>
-                            <p class="text-white-50 mb-5">Please verify your identity</p>
-                            <a class="btn btn-outline-light btn-lg px-5" href="/CreateCertificate">Continue with Google</a>
-                        </div>
-
-                        <div>
-                            <p class="mb-0">
-                                Don't have an account? <a href="/signup" class="text-white-50 fw-bold">Sign Up</a>
-                            </p>
+                            <p class="text-white-50 mb-5">Please select an action</p>
+                            <a href="/Home/Create" class="btn btn-outline-light btn-lg px-5 mb-4" name="provider" value="Google">Create Certificate</a>
+                            <a href="/Home/Verify" class="btn btn-outline-light btn-lg px-5" name="provider" value="Google">Verify Certificate</a>
                         </div>
                     </div>
                 </div>
