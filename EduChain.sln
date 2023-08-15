@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduChain", "EduChain\EduChain.csproj", "{0F2E84B2-155B-4AC2-8155-1DCE499F7C20}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F2E84B2-155B-4AC2-8155-1DCE499F7C20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F2E84B2-155B-4AC2-8155-1DCE499F7C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F2E84B2-155B-4AC2-8155-1DCE499F7C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F2E84B2-155B-4AC2-8155-1DCE499F7C20}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4241431D-28CD-46E0-AAC6-5D887B82ACBD}
+	EndGlobalSection
+EndGlobal
