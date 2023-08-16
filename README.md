@@ -1,4 +1,5 @@
 # EduChain ⚖️🔗
+
 A Decentralized Certificate Verification System (DCVS) built on the Ethereum blockchain.
 
 ## How to Get Started 🚀
@@ -18,10 +19,8 @@ Before you begin, make sure you have the following software installed on your ma
 Open your terminal and run the following command to clone the EduChain repository:
 
 ```bash
-git clone https://github.com/your-username/educhain.git
+git clone https://github.com/ryanneilparker/educhain.git
 ```
-
-Replace your-username with your actual GitHub username.
 
 ## Install Dependencies 📦
 
