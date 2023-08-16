@@ -6,7 +6,7 @@ A Decentralized Certificate Verification System (DCVS) built on the Ethereum blo
 
 Follow these instructions to clone, build, and run EduChain on your local machine.
 
-## Prerequisites 🛠️
+### Prerequisites 🛠️
 
 Before you begin, make sure you have the following software installed on your machine:
 
@@ -14,7 +14,7 @@ Before you begin, make sure you have the following software installed on your ma
 - npm (comes with Node.js)
 - Git
 
-## Clone the Repository 📂
+### Clone the Repository 📂
 
 Open your terminal and run the following command to clone the EduChain repository:
 
@@ -22,7 +22,7 @@ Open your terminal and run the following command to clone the EduChain repositor
 git clone https://github.com/ryanneilparker/educhain.git
 ```
 
-## Install Dependencies 📦
+### Install Dependencies 📦
 
 Navigate to the project directory:
 
@@ -36,7 +36,7 @@ Install the project dependencies using npm:
 npm install
 ```
 
-## Build the Project 🏗️
+### Build the Project 🏗️
 
 To build the project, run the following command:
 
