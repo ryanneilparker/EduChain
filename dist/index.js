@@ -13,6 +13,12 @@ app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../public', 'index.html'));
 });
+app.get('/create', (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, '../public', 'create.html'));
+});
+app.get('/verify', (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, '../public', 'verify.html'));
+});
 app.listen(port, () => {
     console.log(`[⚡️]: Server is running at http://localhost:${port}`);
 });

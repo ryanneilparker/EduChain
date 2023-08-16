@@ -13,6 +13,14 @@ app.get('/', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
+app.get('/create', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, '../public', 'create.html'));
+})
+
+app.get('/verify', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, '../public', 'verify.html'));
+})
+
 app.listen(port, () => {
     console.log(`[⚡️]: Server is running at http://localhost:${port}`);
 });
