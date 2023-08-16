@@ -1,6 +1,5 @@
-# EduChain
-
-A Decentralized Certificate Verification System (DCVS) built on the Ethereum blockchain ⚖️🔗
+# EduChain ⚖️🔗
+A Decentralized Certificate Verification System (DCVS) built on the Ethereum blockchain.
 
 ## How to Get Started 🚀
 
