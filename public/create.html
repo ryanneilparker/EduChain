@@ -22,15 +22,15 @@
                                 <p class="text-white-50 mb-5">Please enter the certificate details</p>
                                 <form action="/CreateCertificate" method="POST">
                                     <div class="form-outline form-white mb-4">
-                                        <input type="text" class="form-control form-control-lg"
+                                        <input name="studentName" type="text" class="form-control form-control-lg"
                                             placeholder="Student Name" />
                                     </div>
                                     <div class="form-outline form-white mb-4">
-                                        <input type="text" class="form-control form-control-lg"
+                                        <input name="certificateName" type="text" class="form-control form-control-lg"
                                             placeholder="Certificate Name" />
                                     </div>
                                     <div class="form-outline form-white mb-4">
-                                        <input type="text" class="form-control form-control-lg" placeholder="Message" />
+                                        <input name="message" type="text" class="form-control form-control-lg" placeholder="Message" />
                                     </div>
                                     <input class="btn btn-outline-light btn-lg px-5" type="submit" value="Create Certificate">
                                 </form>

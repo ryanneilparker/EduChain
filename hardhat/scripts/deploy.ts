@@ -1,27 +1,18 @@
-import { ethers } from "hardhat";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { DeployFunction } from "hardhat-deploy/types";
 
-async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+const deployEduCert: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
+  const { deployments, ethers } = hre;
+  const { deploy } = deployments;
 
-  const lockedAmount = ethers.parseEther("0.001");
-
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
+  // Deploy the EduCert contract
+  await deploy("EduCert", {
+    from: (await ethers.getSigners())[0].address, // Deployer's address
+    args: [], // Add constructor arguments if any
+    log: true,
   });
 
-  await lock.waitForDeployment();
+  console.log(`EduCert contract deployed to: ${(await deployments.get("EduCert")).address}`);
+};
 
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
-}
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+export default deployEduCert;
