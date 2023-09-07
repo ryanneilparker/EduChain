@@ -479,12 +479,8 @@ app.post('/createCertificate', async (req: Request, res: Response) => {
         certificateName,
         message
       );
-    // Estimate gas cost for the transaction
-    // const gasEstimate = await contract.estimateGas.safeMint(wallet.address, studentName, certificateName, message);
 
     // Create a transaction
-    // const transaction = await contract.functions.safeMint(wallet.address, studentName, certificateName, message);
-    // console.log(transaction)
     // // Wait for the transaction to be mined
     const receipt = await transaction.wait();
 
@@ -504,39 +500,31 @@ app.post('/createCertificate', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/verifyCertificate', async (req: Request, res: Response) => {
+app.post('/verifyCertificate', async (req: Request, res: Response) => {
     try {
+      console.log(req.body)
+      const tokenId = req.body.tokenId;
+
       // Ensure you have the sender's private key (onlyOwner)
-      const senderPrivateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'; // Replace with your private key
-  
+      const senderPrivateKey = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d'; 
+
       // Create a wallet with the sender's private key
       const wallet = new ethers.Wallet(senderPrivateKey, provider);
-      const transaction = await contract.connect(wallet).getCertificateData(2);
-     
-      const receipt = await transaction.wait();
+      const certInfo = await contract.connect(wallet).getCertificateData(tokenId);
   
-      // // Check if the transaction was successful
-      if (receipt.status === 1) {
+      // Check if the transaction was successful
+      if (certInfo) {
         // Certificate minted successfully
-        res.status(200).json({ message: receipt });
+        res.status(200).json({ message: certInfo });
       } else {
         // Transaction failed
-        res.status(500).json({ message: 'not receipt' });
+        res.status(500).json({ message: 'transaction failed' });
       }
   
-    } catch (error, transaction) {
-      console.error('Error creating certificate:', transaction);
+    } catch (transaction) {
       res.status(500).json({ message: 'Error verifiying certificate' });
     }
   });
-
-// app.post("/CreateCertificate",(req: Request, res: Response) => {
-
-//     const studentName: string = req.body.studentName;
-
-//     res.send(studentName)
-
-// });
 
 app.use(express.static(path.join(__dirname, 'public')));
 

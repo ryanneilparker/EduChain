@@ -481,11 +481,7 @@ app.post('/createCertificate', (req, res) => __awaiter(void 0, void 0, void 0, f
         // Create a wallet with the sender's private key
         const wallet = new ethers_1.ethers.Wallet(senderPrivateKey, provider);
         const transaction = yield contract.connect(wallet).safeMint(wallet.address, studentName, certificateName, message);
-        // Estimate gas cost for the transaction
-        // const gasEstimate = await contract.estimateGas.safeMint(wallet.address, studentName, certificateName, message);
         // Create a transaction
-        // const transaction = await contract.functions.safeMint(wallet.address, studentName, certificateName, message);
-        // console.log(transaction)
         // // Wait for the transaction to be mined
         const receipt = yield transaction.wait();
         // // Check if the transaction was successful
@@ -504,36 +500,29 @@ app.post('/createCertificate', (req, res) => __awaiter(void 0, void 0, void 0, f
         res.status(500).json({ message: 'Error creating certificate' });
     }
 }));
-app.get('/verifyCertificate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/verifyCertificate', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.body);
+        const tokenId = req.body.tokenId;
         // Ensure you have the sender's private key (onlyOwner)
-        const senderPrivateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'; // Replace with your private key
+        const senderPrivateKey = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d'; // Replace with your private key
         // Create a wallet with the sender's private key
         const wallet = new ethers_1.ethers.Wallet(senderPrivateKey, provider);
-        const transaction = yield contract.connect(wallet).getCertificateData(2);
-        const receipt = yield transaction.wait();
-        // // Check if the transaction was successful
-        if (receipt.status === 1) {
+        const certInfo = yield contract.connect(wallet).getCertificateData(tokenId);
+        // Check if the transaction was successful
+        if (certInfo) {
             // Certificate minted successfully
-            res.status(200).json({ message: receipt });
+            res.status(200).json({ message: certInfo });
         }
         else {
             // Transaction failed
-            res.status(500).json({ message: 'not receipt' });
+            res.status(500).json({ message: 'transaction failed' });
         }
     }
-    catch (error) { }
-    transaction;
+    catch (transaction) {
+        res.status(500).json({ message: 'Error verifiying certificate' });
+    }
 }));
-{
-    console.error('Error creating certificate:', transaction);
-    res.status(500).json({ message: 'Error verifiying certificate' });
-}
-;
-// app.post("/CreateCertificate",(req: Request, res: Response) => {
-//     const studentName: string = req.body.studentName;
-//     res.send(studentName)
-// });
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '../public', 'index.html'));
