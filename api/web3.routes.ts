@@ -3,9 +3,8 @@ import { ethers } from 'ethers';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const web3: Router = express.Router();
-const contractAddress = process.env.CONTRACT_ADDRESS!;
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+const contractAddress = process.env.CONTRACT_ADDRESS!;
 const contractABI = [
   {
     "inputs": [],
@@ -454,6 +453,8 @@ const contractABI = [
 ]
 const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
+const web3: Router = express.Router();
+
 web3.post('/createCertificate', async (req: Request, res: Response) => {
   try {
     const { studentName, certificateName, message } = req.body;
@@ -498,6 +499,10 @@ web3.post('/verifyCertificate', async (req: Request, res: Response) => {
         message: certInfo.message,
       };
 
+      if (!certInfo.studentName || !certInfo.certificateName || !certInfo.message) {
+        res.status(500).json({ message: "Oops, looks like that certificate doesn't exist yet" })
+      }
+
       res.render('verified.ejs', { certificateDetails });
     } else {
       res.status(500).json({ message: 'No cert data received!' });
@@ -507,6 +512,5 @@ web3.post('/verifyCertificate', async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Oops something went wrong whilst trying to verify the certificate!' });
   }
 });
-
 
 export default web3;

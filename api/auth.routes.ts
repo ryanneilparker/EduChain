@@ -16,7 +16,7 @@ auth.get(
         failureRedirect: '/auth/google/failure',
     }),
     function (req, res) {
-      res.redirect("/home");
+        res.redirect("/home");
     }
 );
 
