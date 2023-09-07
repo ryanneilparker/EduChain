@@ -1,4 +1,9 @@
 import express, { Express, Request, Response } from 'express';
+import index from './api/index.routes';
+import web3 from './api/web3.routes';
+import auth from './api/auth.routes';
+import session from 'express-session';
+import passport from 'passport';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -7,20 +12,25 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT;
 
-app.use(express.static(path.join(__dirname, 'public')));
+require('./middleware/passport.middleware');
+app.use(passport.initialize());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.session());
 
-app.get('/', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../public', 'index.html'));
-});
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/create', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../public', 'create.html'));
-})
+app.use(express.static(path.join(__dirname, './public')));
 
-app.get('/verify', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../public', 'verify.html'));
-})
+app.use(index);
+app.use(web3);
+app.use(auth);
 
 app.listen(port, () => {
-    console.log(`[⚡️]: Server is running at http://localhost:${port}`);
+  console.log(`[⚡️]: Server is running at http://localhost:${port}`);
 });
