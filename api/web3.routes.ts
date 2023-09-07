@@ -469,8 +469,14 @@ web3.post('/createCertificate', async (req: Request, res: Response) => {
 
     const receipt = await transaction.wait();
 
-    res.redirect('/created');
+    const certificateDetails = {
+      tokenId: receipt.tokenId,
+      studentName,
+      certificateName,
+      message,
+    };
 
+    res.render('created.ejs', { certificateDetails });
   } catch (error) {
     console.error('Error creating certificate:', error);
     res.status(500).json({ message: 'Error creating certificate' });
@@ -482,6 +488,7 @@ web3.post('/verifyCertificate', async (req: Request, res: Response) => {
     const tokenId = req.body.tokenId;
     const senderPrivateKey = process.env.SENDER_PRIVATE_KEY!;
     const wallet = new ethers.Wallet(senderPrivateKey, provider);
+
     const certInfo = await (contract.connect(wallet) as any).getCertificateData(tokenId);
 
     if (certInfo) {
@@ -491,7 +498,7 @@ web3.post('/verifyCertificate', async (req: Request, res: Response) => {
         message: certInfo.message,
       };
 
-      res.json(certificateDetails); // Respond with JSON data
+      res.render('verified.ejs', { certificateDetails });
     } else {
       res.status(500).json({ message: 'No cert data received!' });
     }
