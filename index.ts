@@ -25,7 +25,7 @@ app.use(passport.session());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, './public/')));
+app.use(express.static(path.join(__dirname, './public')));
 
 app.use(index);
 app.use(web3);

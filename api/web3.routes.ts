@@ -1,8 +1,10 @@
 import express, { Request, Response, Router } from 'express';
 import { ethers } from 'ethers';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const web3: Router = express.Router();
-const contractAddress = process.env.CONTRACT_ADDRESS;
+const contractAddress = process.env.CONTRACT_ADDRESS!;
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 const contractABI = [
   {
@@ -450,7 +452,7 @@ const contractABI = [
     "type": "function"
   }
 ]
-const contract = new ethers.Contract('0xd38d16b4d43cb89f86ac20d396d28ee0d75aca7f', contractABI, provider);
+const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
 web3.post('/createCertificate', async (req: Request, res: Response) => {
   try {
@@ -480,7 +482,7 @@ web3.post('/createCertificate', async (req: Request, res: Response) => {
     //   res.status(500).json({ message: 'Failed to create certificate' });
     // }
     res.send(receipt);
-
+      
   } catch (error) {
     console.error('Error creating certificate:', error);
     res.status(500).json({ message: 'Error creating certificate' });
@@ -489,19 +491,25 @@ web3.post('/createCertificate', async (req: Request, res: Response) => {
 
 web3.post('/verifyCertificate', async (req: Request, res: Response) => {
     try {
-      console.log(req.body)
       const tokenId = req.body.tokenId;
 
       // Ensure you have the sender's private key (onlyOwner)
-      const senderPrivateKey = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d'; 
+      const senderPrivateKey = process.env.SENDER_PRIVATE_KEY!; 
 
       // Create a wallet with the sender's private key
       const wallet = new ethers.Wallet(senderPrivateKey, provider);
       const certInfo = await contract.connect(wallet).getCertificateData(tokenId);
-  
+
       // Check if the transaction was successful
       if (certInfo) {
         // Certificate minted successfully
+
+        const parameter1 = certInfo.studentName;
+        const parameter2 = certInfo.certificateName;
+        const parameter3 = certInfo.message;
+        
+        // const url = `/verificationResult.html?param1=${parameter1}&param2=${parameter2}&param3=${parameter3}`;
+        // window.location.href = url
         res.status(200).json({ message: certInfo });
       } else {
         // Transaction failed
