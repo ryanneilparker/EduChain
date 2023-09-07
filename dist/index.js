@@ -21,7 +21,7 @@ const app = (0, express_1.default)();
 const port = process.env.PORT;
 app.use(express_1.default.urlencoded({ extended: true }));
 // Load the contract ABI and address
-const contractAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
+const contractAddress = process.env.CONTRACT_ADDRESS;
 const contractABI = [
     {
         "inputs": [],
@@ -469,7 +469,7 @@ const contractABI = [
     }
 ];
 // Create an ethers.js provider
-const provider = new ethers_1.ethers.JsonRpcProvider('http://127.0.0.1:8545/');
+const provider = new ethers_1.ethers.JsonRpcProvider(process.env.RPC_URL);
 // Connect to the contract
 const contract = new ethers_1.ethers.Contract(contractAddress, contractABI, provider);
 // POST endpoint to create a certificate
@@ -477,23 +477,22 @@ app.post('/createCertificate', (req, res) => __awaiter(void 0, void 0, void 0, f
     try {
         const { studentName, certificateName, message } = req.body;
         // Ensure you have the sender's private key (onlyOwner)
-        const senderPrivateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'; // Replace with your private key
+        const senderPrivateKey = process.env.SENDER_PRIVATE_KEY;
         // Create a wallet with the sender's private key
         const wallet = new ethers_1.ethers.Wallet(senderPrivateKey, provider);
         const transaction = yield contract.connect(wallet).safeMint(wallet.address, studentName, certificateName, message);
         // Create a transaction
         // // Wait for the transaction to be mined
         const receipt = yield transaction.wait();
-        // // Check if the transaction was successful
-        if (receipt.status === 1) {
-            // Certificate minted successfully
-            res.status(200).json({ message: receipt });
-        }
-        else {
-            // Transaction failed
-            res.status(500).json({ message: 'Failed to create certificate' });
-        }
-        res.send(studentName + certificateName + message);
+        // // // Check if the transaction was successful
+        // if (receipt.status === 1) {
+        //   // Certificate minted successfully
+        //   res.status(200).json({ message: receipt  });
+        // } else {
+        //   // Transaction failed
+        //   res.status(500).json({ message: 'Failed to create certificate' });
+        // }
+        res.send(receipt);
     }
     catch (error) {
         console.error('Error creating certificate:', error);
@@ -505,7 +504,7 @@ app.post('/verifyCertificate', (req, res) => __awaiter(void 0, void 0, void 0, f
         console.log(req.body);
         const tokenId = req.body.tokenId;
         // Ensure you have the sender's private key (onlyOwner)
-        const senderPrivateKey = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d'; // Replace with your private key
+        const senderPrivateKey = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d';
         // Create a wallet with the sender's private key
         const wallet = new ethers_1.ethers.Wallet(senderPrivateKey, provider);
         const certInfo = yield contract.connect(wallet).getCertificateData(tokenId);
