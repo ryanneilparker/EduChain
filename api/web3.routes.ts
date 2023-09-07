@@ -1,7 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import { ethers } from 'ethers';
 
-
 const web3: Router = express.Router();
 
 // Load the contract ABI and address
