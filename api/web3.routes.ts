@@ -191,6 +191,19 @@ const contractABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getTokenId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -264,6 +277,19 @@ const contractABI = [
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "returnTokenId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -468,10 +494,10 @@ web3.post('/createCertificate', async (req: Request, res: Response) => {
       message
     );
 
-    const receipt = await transaction.wait();
-
+    const tokenId = await (contract.connect(wallet) as any).getTokenId();
+    
     const certificateDetails = {
-      tokenId: receipt.tokenId,
+      tokenId: Number(tokenId),
       studentName,
       certificateName,
       message,

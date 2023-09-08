@@ -10,6 +10,7 @@ contract EduCert is ERC721, Ownable {
 
     // To track the total number of EduCerts issued & auto-increment ids
     Counters.Counter private _tokenIdCounter;
+    uint256 public returnTokenId;
 
     // Mapping to associate studentName, certificateName, and message with token ID
     mapping(uint256 => CertificateData) private _certificateData;
@@ -30,7 +31,8 @@ contract EduCert is ERC721, Ownable {
         string memory studentName,
         string memory certificateName,
         string memory message
-    ) public onlyOwner {
+    ) public onlyOwner 
+    {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
@@ -41,6 +43,11 @@ contract EduCert is ERC721, Ownable {
             certificateName: certificateName,
             message: message
         });
+        returnTokenId = tokenId;
+    }
+
+    function getTokenId() public view returns (uint256) {
+        return returnTokenId;
     }
 
     // Retrieve certificate data by token ID
