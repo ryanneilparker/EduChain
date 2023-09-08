@@ -12,6 +12,9 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT;
 
+app.set('view engnier', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
+
 require('./middleware/passport.middleware');
 app.use(passport.initialize());
 app.use(
@@ -25,7 +28,7 @@ app.use(passport.session());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(index);
 app.use(web3);

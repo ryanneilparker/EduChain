@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from 'express';
-import path from 'path';
 import { ensureAuthenticated } from '../middleware/auth.middleware';
+import path from 'path';
 
 const index: Router = express.Router();
 
@@ -14,10 +14,10 @@ index.get('/home', ensureAuthenticated, (req: Request, res: Response) => {
 
 index.get('/create', ensureAuthenticated, (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../public', 'create.html'));
-})
+});
 
 index.get('/verify', ensureAuthenticated, (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../public', 'verify.html'));
-})
+});
 
 export default index;

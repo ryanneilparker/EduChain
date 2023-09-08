@@ -3,9 +3,8 @@ import { ethers } from 'ethers';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const web3: Router = express.Router();
-const contractAddress = process.env.CONTRACT_ADDRESS!;
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+const contractAddress = process.env.CONTRACT_ADDRESS!;
 const contractABI = [
   {
     "inputs": [],
@@ -454,35 +453,31 @@ const contractABI = [
 ]
 const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
+const web3: Router = express.Router();
+
 web3.post('/createCertificate', async (req: Request, res: Response) => {
   try {
     const { studentName, certificateName, message } = req.body;
-    // Ensure you have the sender's private key (onlyOwner)
-    const senderPrivateKey = process.env.SENDER_PRIVATE_KEY; 
-
-    // Create a wallet with the sender's private key
+    const senderPrivateKey = process.env.SENDER_PRIVATE_KEY!;
     const wallet = new ethers.Wallet(senderPrivateKey, provider);
-    const transaction = await contract.connect(wallet).safeMint(
-        wallet.address,
-        studentName,
-        certificateName,
-        message
-      );
 
-    // Create a transaction
-    // // Wait for the transaction to be mined
+    const transaction = await (contract.connect(wallet) as any).safeMint(
+      wallet.address,
+      studentName,
+      certificateName,
+      message
+    );
+
     const receipt = await transaction.wait();
 
-    // // // Check if the transaction was successful
-    // if (receipt.status === 1) {
-    //   // Certificate minted successfully
-    //   res.status(200).json({ message: receipt  });
-    // } else {
-    //   // Transaction failed
-    //   res.status(500).json({ message: 'Failed to create certificate' });
-    // }
-    res.send(receipt);
-      
+    const certificateDetails = {
+      tokenId: receipt.tokenId,
+      studentName,
+      certificateName,
+      message,
+    };
+
+    res.render('created.ejs', { certificateDetails });
   } catch (error) {
     console.error('Error creating certificate:', error);
     res.status(500).json({ message: 'Error creating certificate' });
@@ -490,35 +485,32 @@ web3.post('/createCertificate', async (req: Request, res: Response) => {
 });
 
 web3.post('/verifyCertificate', async (req: Request, res: Response) => {
-    try {
-      const tokenId = req.body.tokenId;
+  try {
+    const tokenId = req.body.tokenId;
+    const senderPrivateKey = process.env.SENDER_PRIVATE_KEY!;
+    const wallet = new ethers.Wallet(senderPrivateKey, provider);
 
-      // Ensure you have the sender's private key (onlyOwner)
-      const senderPrivateKey = process.env.SENDER_PRIVATE_KEY!; 
+    const certInfo = await (contract.connect(wallet) as any).getCertificateData(tokenId);
 
-      // Create a wallet with the sender's private key
-      const wallet = new ethers.Wallet(senderPrivateKey, provider);
-      const certInfo = await contract.connect(wallet).getCertificateData(tokenId);
+    if (certInfo) {
+      const certificateDetails = {
+        studentName: certInfo.studentName,
+        certificateName: certInfo.certificateName,
+        message: certInfo.message,
+      };
 
-      // Check if the transaction was successful
-      if (certInfo) {
-        // Certificate minted successfully
-
-        const parameter1 = certInfo.studentName;
-        const parameter2 = certInfo.certificateName;
-        const parameter3 = certInfo.message;
-        
-        // const url = `/verificationResult.html?param1=${parameter1}&param2=${parameter2}&param3=${parameter3}`;
-        // window.location.href = url
-        res.status(200).json({ message: certInfo });
-      } else {
-        // Transaction failed
-        res.status(500).json({ message: 'transaction failed' });
+      if (!certInfo.studentName || !certInfo.certificateName || !certInfo.message) {
+        res.status(500).json({ message: "Oops, looks like that certificate doesn't exist yet" })
       }
-  
-    } catch (transaction) {
-      res.status(500).json({ message: 'Error verifiying certificate' });
+
+      res.render('verified.ejs', { certificateDetails });
+    } else {
+      res.status(500).json({ message: 'No cert data received!' });
     }
-  });
+  } catch (error) {
+    console.error('Error verifying certificate:', error);
+    res.status(500).json({ message: 'Oops something went wrong whilst trying to verify the certificate!' });
+  }
+});
 
 export default web3;
